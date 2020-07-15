@@ -7,6 +7,10 @@ const Button = ({name, onClick}) => {
   )
 }
 
+const Statistic = ({text, value}) => {
+  return <div>{text} {value}</div>
+}
+
 const Statistics = ({good, neutral, bad}) => {
   const all = good + neutral + bad
   if (all === 0) return (
@@ -20,14 +24,12 @@ const Statistics = ({good, neutral, bad}) => {
   return (
     <div>
       <h1>statistics</h1>
-      <p>
-        good {good} <br></br>
-        neutral {neutral} <br></br>
-        bad {bad} <br></br>
-        all {all}<br></br>
-        average {average}<br></br>
-        positive {positive} %<br></br>
-      </p>
+      <Statistic text='good' value={good} />
+      <Statistic text='neutral' value={neutral} />
+      <Statistic text='bad' value={bad} />
+      <Statistic text='all' value={all} />
+      <Statistic text='average' value={average} />
+      <Statistic text='positive' value={positive} />
     </div>
   )
 }
