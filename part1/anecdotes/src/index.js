@@ -19,19 +19,26 @@ const newVotes = (array, index) => {
   return newArray
 }
 
+const findBest = (array) => {
+  return array.reduce((s,v,i,a) => a[i]>a[s] ? i : s, 0)
+}
+
 const App = (props) => {
   const [selected, setSelected] = useState(0)
   const [votes, setVotes] = useState(Array(props.anecdotes.length).fill(0))
-  console.log('selected=', selected)
-  console.log('votes=', votes)
+  const mostVotes = findBest(votes)
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       {props.anecdotes[selected]}
       <Display votes={votes[selected]} />
       <div>
         <Button text='vote' onClick={() => setVotes(newVotes(votes, selected))} />
         <Button text='next anecdote' onClick={() => setSelected(randomInt(props.anecdotes.length - 1))} />
       </div>
+      <h1>Anecdote with most votes</h1>
+      {props.anecdotes[mostVotes]}
+      <Display votes={votes[mostVotes]} />
     </div>
   )
 }
