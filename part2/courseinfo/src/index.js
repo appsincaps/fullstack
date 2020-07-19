@@ -13,12 +13,10 @@ const Part = (props) => {
   )
 }
 
-const Content = (props) => {
+const Content = ({course}) => {
   return (
     <div>
-      <Part part={props.course.parts[0]} />
-      <Part part={props.course.parts[1]} />
-      <Part part={props.course.parts[2]} />
+      {course.parts.map((part)=><Part key={part.id} part={part} />)}
     </div>
   )
 }
@@ -57,6 +55,11 @@ const App = () => {
         name: 'State of a component',
         exercises: 14,
         id: 3
+      },
+      {
+        name: 'Something else',
+        exercises: 174,
+        id: 4
       }
     ]
   }
