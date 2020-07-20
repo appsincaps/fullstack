@@ -12,9 +12,17 @@ const App = () => {
     setNewName(event.target.value)
   }
 
+  const personExists = (name) => {
+    return persons.some(person=>person.name===name)
+  }
+
   const handleSubmit = (event) => {
     event.preventDefault()
-    setPersons(persons.concat({ name: newName }))
+    if (personExists(newName)) {
+      alert(`${newName} is already added to the list`)
+    } else {
+      setPersons(persons.concat({ name: newName }))
+    }
     setNewName('')
   }
 
