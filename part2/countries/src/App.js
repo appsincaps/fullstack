@@ -3,7 +3,7 @@ import axios from 'axios'
 import Search from './components/Search'
 import Results from './components/Results'
 
-const App = (props) => {
+const App = () => {
 
   const [ search,     setSearch ]     = useState('')
   const [ countries,  setCountries ]  = useState([])
@@ -16,6 +16,9 @@ const App = (props) => {
       })
   }, [])
 
+  const filteredCountries = countries
+    .filter((country) => country.name.toLowerCase().includes(search.toLowerCase()))
+
   const searchHandler = (event) => {
     event.preventDefault()
     setSearch(event.target.value)
@@ -24,7 +27,7 @@ const App = (props) => {
   return (
     <div>
       <Search search={search} onChange={searchHandler} />
-      <Results />
+      <Results list={filteredCountries} />
     </div>
   )
 }
