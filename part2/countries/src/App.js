@@ -24,10 +24,14 @@ const App = () => {
     setSearch(event.target.value)
   }
 
+  const show = (country) => {
+    setSearch(country)
+  }
+
   return (
     <div>
       <Search search={search} onChange={searchHandler} />
-      <Results list={filteredCountries} />
+      <Results list={filteredCountries} show={show} />
     </div>
   )
 }

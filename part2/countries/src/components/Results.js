@@ -2,8 +2,8 @@ import React from 'react'
 import Display from './Display'
 import Detail from './Detail'
 
-const Results = ({list}) => {
-
+const Results = ({list, show}) => {
+  
   if (list.length === 0) {
     return <div>No results</div>
   } 
@@ -19,7 +19,7 @@ const Results = ({list}) => {
   else {
     return (
       <div>
-        {list.map(country=><Display key={country.name} country={country} />)}
+        {list.map(country=><Display key={country.name} country={country} show={show} />)}
       </div>
     )
   }
