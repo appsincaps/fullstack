@@ -5,8 +5,9 @@ import Results from './components/Results'
 
 const App = () => {
 
-  const [ search,     setSearch ]     = useState('')
+  const [ search,     setSearch    ]  = useState('')
   const [ countries,  setCountries ]  = useState([])
+  const [ weather,    setWeather   ]  = useState({})
 
   useEffect(() => {
     axios
@@ -31,7 +32,8 @@ const App = () => {
   return (
     <div>
       <Search search={search} onChange={searchHandler} />
-      <Results list={filteredCountries} show={show} />
+      <Results list={filteredCountries} show={show} 
+        weather={weather} setWeather={setWeather}/>
     </div>
   )
 }

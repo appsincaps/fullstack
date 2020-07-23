@@ -2,14 +2,14 @@ import React from 'react'
 import Display from './Display'
 import Detail from './Detail'
 
-const Results = ({list, show}) => {
+const Results = ({list, show, weather, setWeather}) => {
   
   if (list.length === 0) {
     return <div>No results</div>
   } 
   
   else if (list.length === 1) {
-    return <Detail country={list[0]} />
+    return <Detail country={list[0]} weather={weather} setWeather={setWeather} />
   } 
   
   else if (list.length > 10) {
@@ -19,7 +19,8 @@ const Results = ({list, show}) => {
   else {
     return (
       <div>
-        {list.map(country=><Display key={country.name} country={country} show={show} />)}
+        {list.map(country=><Display key={country.name} 
+                  country={country} show={show} />)}
       </div>
     )
   }
