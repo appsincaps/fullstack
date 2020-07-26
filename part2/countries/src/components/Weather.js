@@ -12,7 +12,7 @@ const Weather = ({country, weather, setWeather}) => {
     axios
       .get(url)
       .then(result => {
-        console.log(result)
+        //console.log(result)
         const data =  {  
                         temperature:  result.data.current.temperature,
                         wind_speed:   result.data.current.wind_speed,

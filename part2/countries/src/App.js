@@ -28,11 +28,12 @@ const App = () => {
   const show = (country) => {
     setSearch(country)
   }
+  
 
   return (
     <div>
       <Search search={search} onChange={searchHandler} />
-      <Results list={filteredCountries} show={show} 
+      <Results list={filteredCountries} show={show}
         weather={weather} setWeather={setWeather}/>
     </div>
   )
