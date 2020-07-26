@@ -46,6 +46,20 @@ const App = () => {
     setNewNumber('')
   }
 
+  const removePerson = (event, person) => {
+    event.preventDefault()
+    if (window.confirm(`Delete ${person.name}?`)) {
+      personService.remove(person.id)
+      .then(() => {
+        personService
+          .getAll()
+          .then(response => {
+            setPersons(response)
+          })
+      })
+    }
+  }
+
   const shownPersons = filter === '' ?
         persons : 
         persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
@@ -61,7 +75,7 @@ const App = () => {
         handleSubmit={handleSubmit} 
       />
       <h2>Numbers</h2>
-      <Persons persons={shownPersons} />
+      <Persons persons={shownPersons} removePerson={removePerson} />
     </div>
   )
 }
