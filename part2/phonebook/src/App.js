@@ -28,14 +28,29 @@ const App = () => {
   }
 
   const personExists = (name) => {
-    return persons.some(person=>person.name===name)
+    return persons.find(person=>person.name===name)
   }
 
   const handleSubmit = (event) => {
     event.preventDefault()
     if (newName === '') return
-    if (personExists(newName)) {
-      alert(`${newName} is already added to the list`)
+    const person = personExists(newName)
+    if (person) {
+      if (person.number === newNumber) {
+        alert(`${newName}: ${newNumber} is already on the list`)
+      } else {
+        if (window.confirm(`${person.name} is already on the list. Modify the phone number?`)) {
+          personService.update(person.id, { name: newName, number: newNumber })
+          .then(() => {
+            personService
+              .getAll()
+              .then(response => {
+                setPersons(response)
+              })
+          })
+        }
+        
+      }
     } else {
       personService.create({ name: newName, number: newNumber })
         .then((response) => {
