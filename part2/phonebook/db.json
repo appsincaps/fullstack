@@ -24,11 +24,6 @@
       "name": "John Doe",
       "number": "123-4567",
       "id": 5
-    },
-    {
-      "name": "test",
-      "number": "2",
-      "id": 6
     }
   ]
 }

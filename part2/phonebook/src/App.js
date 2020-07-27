@@ -51,11 +51,16 @@ const App = () => {
         if (window.confirm(`${person.name} is already on the list. Modify the phone number?`)) {
           personService.update(person.id, { name: newName, number: newNumber })
           .then(() => {
+            postMessage(`${person.name} phone number is successfully modified.`, 'success')
+          })
+          .catch(() => {
+            postMessage(`Information on ${person.name} has been removed from the server`, 'error')
+          })
+          .finally(() => {
             personService
               .getAll()
               .then(response => {
                 setPersons(response)
-                postMessage(`${person.name} phone number is successfully modified.`, 'success')
               })
           })
         }
