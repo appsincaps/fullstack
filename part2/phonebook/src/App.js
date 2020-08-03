@@ -37,7 +37,7 @@ const App = () => {
   const postMessage = (msg, type) => {
     setMessage(msg)
     setMsgType(type)
-    setTimeout(()=>setMessage(null), 5000)
+    setTimeout(()=>setMessage(null), 3000)
   }
 
   const handleSubmit = (event) => {
@@ -80,11 +80,14 @@ const App = () => {
   const removePerson = (event, person) => {
     event.preventDefault()
     if (window.confirm(`Delete ${person.name}?`)) {
+      console.log(person, 'before delete')
       personService.remove(person.id)
       .then(() => {
+        console.log(person, 'after delete')
         personService
           .getAll()
           .then(response => {
+            console.log(response)
             setPersons(response)
           })
       })
