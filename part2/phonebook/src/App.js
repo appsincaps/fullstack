@@ -34,8 +34,9 @@ const App = () => {
     return persons.find(person=>person.name===name)
   }
 
-  const postMessage = (msg, type) => {
-    setMessage(msg)
+  const postMessage = (msg) => {
+    const type = 'success' in msg ? 'success' : 'error'
+    setMessage(msg[type])
     setMsgType(type)
     setTimeout(()=>setMessage(null), 3000)
   }
@@ -51,10 +52,10 @@ const App = () => {
         if (window.confirm(`${person.name} is already on the list. Modify the phone number?`)) {
           personService.update(person.id, { name: newName, number: newNumber })
           .then(() => {
-            postMessage(`${person.name} phone number is successfully modified.`, 'success')
+            postMessage({ success: `${person.name} phone number is successfully modified.`} )
           })
           .catch(() => {
-            postMessage(`Information on ${person.name} has been removed from the server`, 'error')
+            postMessage({ error: `Information on ${person.name} has been removed from the server` })
           })
           .finally(() => {
             personService
@@ -68,9 +69,12 @@ const App = () => {
       }
     } else {
       personService.create({ name: newName, number: newNumber })
-        .then((response) => {
+        .then( response => {
           setPersons(persons.concat(response))
-          postMessage(`${response.name} is successfully added to the list.`, 'success')
+          postMessage({ success: `${response.name} is successfully added to the list.` })
+        })
+        .catch( error => {
+          postMessage(error.response.data)
         })
     }
     setNewName('')
@@ -80,14 +84,11 @@ const App = () => {
   const removePerson = (event, person) => {
     event.preventDefault()
     if (window.confirm(`Delete ${person.name}?`)) {
-      console.log(person, 'before delete')
       personService.remove(person.id)
       .then(() => {
-        console.log(person, 'after delete')
         personService
           .getAll()
           .then(response => {
-            console.log(response)
             setPersons(response)
           })
       })
