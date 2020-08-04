@@ -54,8 +54,9 @@ const App = () => {
           .then(() => {
             postMessage({ success: `${person.name} phone number is successfully modified.`} )
           })
-          .catch(() => {
-            postMessage({ error: `Information on ${person.name} has been removed from the server` })
+          .catch( error => {
+            console.log(error.response.data)
+            postMessage(error.response.data)
           })
           .finally(() => {
             personService
