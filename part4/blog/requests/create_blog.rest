@@ -1,0 +1,23 @@
+GET http://localhost:3003/api/blogs
+
+###
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "Google me",
+  "author": "SF",
+  "url": "www.google.com",
+  "likes": 0
+}
+
+###
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "Sunlight",
+  "author": "SF",
+  "url": "www.sunlightx.com",
+  "likes": 1
+}
