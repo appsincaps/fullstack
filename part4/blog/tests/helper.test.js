@@ -84,6 +84,16 @@ describe('Favorite Blog', () => {
 
   test('2. Sample blogs list', () => {
     expect(listHelper.favoriteBlog(sampleBlogs)).toEqual(sampleBlogs[2])
+  })
+})
 
+describe('Most Blogs', () => {
+
+  test('1. Empty blogs list', () => {
+    expect(listHelper.mostBlogs([])).toBe(null)
+  })
+
+  test('2. Sample blogs list', () => {
+    expect(listHelper.mostBlogs(sampleBlogs)).toEqual({author:"Robert C. Martin", blogs:3})
   })
 })
