@@ -97,3 +97,14 @@ describe('Most Blogs', () => {
     expect(listHelper.mostBlogs(sampleBlogs)).toEqual({author:"Robert C. Martin", blogs:3})
   })
 })
+
+describe('Most Likes', () => {
+
+  test('1. Empty blogs list', () => {
+    expect(listHelper.mostLikes([])).toBe(null)
+  })
+
+  test('2. Sample blogs list', () => {
+    expect(listHelper.mostLikes(sampleBlogs)).toEqual({author:"Edsger W. Dijkstra", likes:17})
+  })
+})
