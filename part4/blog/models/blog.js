@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const config = require('../utils/config')
 
 const blogSchema = mongoose.Schema({
   title: String,
@@ -8,7 +7,4 @@ const blogSchema = mongoose.Schema({
   likes: Number
 })
 
-mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-const Blog = mongoose.model('Blog', blogSchema)
-
-module.exports = Blog
+module.exports = mongoose.model('Blog', blogSchema)
