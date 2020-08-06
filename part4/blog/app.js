@@ -20,3 +20,5 @@ app.use(cors())
 app.use(express.json())
 app.use(middleware.requestLogger)
 app.use('/api/blogs/', blogRouter)
+
+module.exports = app
