@@ -115,6 +115,18 @@ test('api test: adding a new blog without likes', async () => {
   expect(blogs[helper.initialBlogs.length].likes).toBe(0)
 })
 
+test('api test: check deleted blog is deleted', async () => {
+  let blogs = await helper.blogsInDb()
+  expect(blogs.map(b => b.title)).toContain("Google")
+
+  const blog = blogs[0]
+  const id = blog.id
+  await api.delete(`/api/blogs/${id}`)
+    .expect(204)
+
+  blogs = await helper.blogsInDb()
+  expect(blogs.map(b => b.title)).not.toContain(blog.title)
+})
 
 afterAll(() => {
   mongoose.connection.close()
