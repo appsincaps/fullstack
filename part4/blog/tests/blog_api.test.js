@@ -75,6 +75,23 @@ test('api test: a blog without title will not be added', async () => {
   expect(blogs).toHaveLength(helper.initialBlogs.length)
 })
 
+test('api test: a blog without url will not be added', async () => {
+
+  const blog = new Blog({
+    title: 'Test blog',
+    author: 'AI',
+    likes: 100
+  })
+
+  await api
+    .post('/api/blogs')
+    .send(blog)
+    .expect(400)
+
+  const blogs = await helper.blogsInDb()
+  expect(blogs).toHaveLength(helper.initialBlogs.length)
+})
+
 test('api test: expects to have an id', async () => {
   const response = await api.get('/api/blogs')
   expect(response.body[0].id).toBeDefined()
