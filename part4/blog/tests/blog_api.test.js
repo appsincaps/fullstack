@@ -92,7 +92,7 @@ test('api test: a blog without url will not be added', async () => {
   expect(blogs).toHaveLength(helper.initialBlogs.length)
 })
 
-test('api test: expects to have an id', async () => {
+test('api test: blogs have an id', async () => {
   const response = await api.get('/api/blogs')
   expect(response.body[0].id).toBeDefined()
 })
@@ -108,6 +108,8 @@ test('api test: adding a new blog without likes', async () => {
   await api
     .post('/api/blogs')
     .send(blog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
 
   const blogs = await helper.blogsInDb()
 
@@ -126,6 +128,21 @@ test('api test: check deleted blog is deleted', async () => {
 
   blogs = await helper.blogsInDb()
   expect(blogs.map(b => b.title)).not.toContain(blog.title)
+})
+
+test('api test: blogs can be updated', async () => {
+  let blogs = await helper.blogsInDb()
+  const newBlog = { ...blogs[0], likes: 99 }
+  const id = newBlog.id
+  delete newBlog.id
+
+  await api
+    .put(`/api/blogs/${id}`)
+    .send(newBlog)
+
+  blogs = await helper.blogsInDb()
+  console.log(blogs[0])
+  expect(blogs[0].likes).toBe(99)
 })
 
 afterAll(() => {
