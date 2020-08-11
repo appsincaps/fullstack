@@ -75,6 +75,12 @@ test('api test: a blog without title will not be added', async () => {
   expect(blogs).toHaveLength(helper.initialBlogs.length)
 })
 
+test('api test: expects to have a unique id', async () => {
+  const response = await api.get('/api/blogs')
+  expect(response.body[0].id).toBeDefined()
+})
+
+
 afterAll(() => {
   mongoose.connection.close()
 })
