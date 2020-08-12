@@ -1,8 +1,9 @@
 const mongoose = require('mongoose')
 mongoose.set('useFindAndModify', false)
+mongoose.set('useCreateIndex', true)
 
 const authorSchema = new mongoose.Schema({
-  username: { type: String, required: true },
+  username: { type: String, minlength: 3, required: true, unique: true },
   name: { type: String },
   password: { type: String, required: true }
 })

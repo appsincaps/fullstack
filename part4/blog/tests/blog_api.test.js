@@ -195,6 +195,43 @@ describe('tests for working with authors db', () => {
     const authors = await helper.authorsInDb()
     expect(authors).toHaveLength(2)
   })
+
+  test('author db: validation test with short username', async () => {
+
+    const password = 'mysecretword2'
+    const author = {
+      username: '12',
+      name: 'User name2',
+      password
+    }
+
+    const response = await api
+      .post('/api/authors')
+      .send(author)
+      .expect(400)
+
+    const authors = await helper.authorsInDb()
+    expect(authors).toHaveLength(1)
+  })
+
+  test('author db: validation test with short password', async () => {
+
+    const password = '12'
+    const author = {
+      username: 'Username',
+      name: 'User name2',
+      password
+    }
+
+    const response = await api
+      .post('/api/authors')
+      .send(author)
+      .expect(400)
+    
+    const authors = await helper.authorsInDb()
+    expect(authors).toHaveLength(1)
+  })
+
 })
 
 afterAll(() => {
