@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+mongoose.set('useFindAndModify', false)
 
 const authorSchema = new mongoose.Schema({
   username: { type: String, required: true },
