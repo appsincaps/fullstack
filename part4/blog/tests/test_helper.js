@@ -1,4 +1,6 @@
 const Blog = require('../models/blog')
+const Author = require('../models/author')
+const bcrypt = require('bcrypt')
 
 const initialBlogs = [
   {
@@ -33,6 +35,11 @@ const blogsInDb = async () => {
   return blogs.map(blog => blog.toJSON())
 }
 
+const authorsInDb = async () => {
+  const authors = await Author.find({})
+  return authors.map(author => author.toJSON())
+}
+
 module.exports = {
-  initialBlogs, nonExistingId, blogsInDb
+  initialBlogs, nonExistingId, blogsInDb, authorsInDb
 }

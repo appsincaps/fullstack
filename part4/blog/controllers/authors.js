@@ -14,7 +14,7 @@ authorRouter.post('/', async (request, response) => {
   })
 
   const savedAuthor = await newAuthor.save()
-  response.json(savedAuthor)
+  response.status(201).json(savedAuthor)
 })
 
 authorRouter.get('/', async (request, response) => {

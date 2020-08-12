@@ -7,6 +7,9 @@ const Blog = require('../models/blog')
 const bcrypt = require('bcrypt')
 const Author = require('../models/author')
 const authorRouter = require('../controllers/authors')
+const { initialAuthors, authorsInDb } = require('./test_helper')
+
+/**** API TESTS ****/
 
 describe('api tests for working with blogs', () => {
 
@@ -145,22 +148,25 @@ describe('api tests for working with blogs', () => {
       .send(newBlog)
   
     blogs = await helper.blogsInDb()
-    console.log(blogs[0])
     expect(blogs[0].likes).toBe(99)
   })
   
 })
 
-describe('author db: when there is one author in db', () => {
+/**** AUTHOR DB TESTS ****/
+
+describe('tests for working with authors db', () => {
 
   beforeEach(async () => {
     await Author.deleteMany({})
+
     const password = await bcrypt.hash('mysecretword', 10)
     const author = new Author({
       username: 'Username',
       name: 'User name',
       password
     })
+
     await author.save()
   })
 
@@ -170,6 +176,24 @@ describe('author db: when there is one author in db', () => {
       .expect(200)
 
     expect(response.body).toHaveLength(1)
+  })
+
+  test('author db: creating a new author', async () => {
+
+    const password = 'mysecretword2'
+    const author = {
+      username: 'Username2',
+      name: 'User name2',
+      password
+    }
+
+    const response = await api
+      .post('/api/authors')
+      .send(author)
+      .expect(201)
+
+    const authors = await helper.authorsInDb()
+    expect(authors).toHaveLength(2)
   })
 })
 
