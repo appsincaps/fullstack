@@ -218,7 +218,7 @@ describe('tests for working with authors db', () => {
 
     const password = '12'
     const author = {
-      username: 'Username',
+      username: 'Username3',
       name: 'User name2',
       password
     }
@@ -228,6 +228,37 @@ describe('tests for working with authors db', () => {
       .send(author)
       .expect(400)
     
+    const authors = await helper.authorsInDb()
+    expect(authors).toHaveLength(1)
+  })
+
+  test('author db: validation test with no username or password', async () => {
+
+    const author = {}
+
+    const response = await api
+      .post('/api/authors')
+      .send(author)
+      .expect(400)
+    
+    const authors = await helper.authorsInDb()
+    expect(authors).toHaveLength(1)
+  })
+
+  test('author db: validation test with nonunique username', async () => {
+
+    const password = 'mysecretword3'
+    const author = {
+      username: 'Username2',
+      name: 'User name3',
+      password
+    }
+
+    const response = await api
+      .post('/api/authors')
+      .send(author)
+      .expect(400)
+
     const authors = await helper.authorsInDb()
     expect(authors).toHaveLength(1)
   })
