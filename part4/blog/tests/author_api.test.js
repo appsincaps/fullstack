@@ -21,11 +21,14 @@ describe('author db: when there is one author in db', () => {
   })
 
   test('author db: list all authors', async () => {
-    const authors = await api
+    const response = await api
       .get('/api/authors')
       .expect(200)
-      .body
 
-    expect(authors).toHaveLength(1)
+    expect(response.body).toHaveLength(1)
   })
+})
+
+afterAll(() => {
+  mongoose.connection.close()
 })
