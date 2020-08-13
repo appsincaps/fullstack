@@ -47,6 +47,7 @@ Content-Type: application/json
   "blogs": []
 }
 
+// Login authentication
 ###
 POST http://localhost:3003/api/login
 Content-Type: application/json
@@ -56,6 +57,7 @@ Content-Type: application/json
   "password": "password"
 }
 
+// Authenticated create
 ###
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
@@ -67,3 +69,9 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZ
   "url": "https://reactpatterns.com/", 
   "likes": 7
 }
+
+// Authenticated delete
+###
+DELETE http://localhost:3003/api/blogs/5f35839b69412f09c0def5f5
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJuYW1lIiwibmFtZSI6IlVzZXIgTmFtZSIsImlkIjoiNWYzNTZhYWQyMTc5NTQwYzM0YmVhNjI0IiwiaWF0IjoxNTk3MzQxNzUzfQ.mVoSRDVpn3Gt4fevKMKtXahEzF2PvwfFuhkIiEXt_lk
