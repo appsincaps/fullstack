@@ -1,6 +1,9 @@
 GET http://localhost:3003/api/blogs
 
 ###
+GET http://localhost:3003/api/users
+
+###
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
@@ -31,4 +34,15 @@ Content-Type: application/json
   "author": "Michael Chan", 
   "url": "https://reactpatterns.com/", 
   "likes": 7
+}
+
+###
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "username": "username",
+  "name": "User Name",
+  "password": "password",
+  "blogs": []
 }

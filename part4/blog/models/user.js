@@ -4,9 +4,23 @@ mongoose.set('useFindAndModify', false)
 mongoose.set('useCreateIndex', true)
 
 const userSchema = new mongoose.Schema({
-  username: { type: String, minlength: 3, required: true, unique: true },
-  name: { type: String },
-  password: { type: String, required: true }
+  blogs: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Blog'
+    }
+  ],
+  username: { 
+    type: String, 
+    minlength: 3, 
+    required: true, 
+    unique: true 
+  },
+  name: String,
+  password: { 
+    type: String, 
+    required: true 
+  }
 })
 
 userSchema.plugin(uniqueValidator)
