@@ -13,7 +13,7 @@ const userRouter = require('../controllers/users')
 describe('api tests for working with blogs', () => {
 
   beforeEach(async () => {
-    /*
+    
     await User.deleteMany({})
 
     const password = await bcrypt.hash('mysecretword', 10)
@@ -22,7 +22,7 @@ describe('api tests for working with blogs', () => {
       name: 'User Name',
       password
     }).save()
-    */
+    
 
     await Blog.deleteMany({})
   
