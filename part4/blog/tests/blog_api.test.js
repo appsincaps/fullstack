@@ -161,8 +161,8 @@ describe('tests for working with user db', () => {
 
     const password = await bcrypt.hash('mysecretword', 10)
     const user = new User({
-      username: 'Username',
-      name: 'User name',
+      username: 'username',
+      name: 'User Name',
       password
     })
 
@@ -246,20 +246,25 @@ describe('tests for working with user db', () => {
 
   test('user db: validation test with nonunique username', async () => {
 
+    const usersBefore = await helper.usersInDb()
+    const username = usersBefore[0].username
     const password = 'mysecretword2'
+
     const user = {
-      username: 'Username',
-      name: 'User name',
+      name: 'User Name',
+      username,
       password
     }
 
-    const response = await api
+    const result = await api
       .post('/api/users')
       .send(user)
       .expect(400)
 
-    const users = await helper.usersInDb()
-    expect(users).toHaveLength(1)
+    expect(result.body.error).toContain('`username` to be unique')
+
+    const usersAfter = await helper.usersInDb()
+    expect(usersAfter).toHaveLength(usersBefore.length)
   })
 
 })
