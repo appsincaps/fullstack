@@ -12,8 +12,10 @@ const userRouter = require('../controllers/users')
 
 describe('api tests for working with blogs', () => {
 
+  let header = {}
+
   beforeEach(async () => {
-    
+
     // Create users:
 
     await User.deleteMany({})
@@ -42,6 +44,13 @@ describe('api tests for working with blogs', () => {
     const promises = blogs.map(blog => blog.save())
   
     await Promise.all(promises)
+
+    // Login:
+    const response = await api
+      .post('/api/login')
+      .send({ username: 'username', password: 'password'})
+
+    header.Authorization = `Bearer ${response.body.token}`
   })
   
   test('api test: blogs are returned as json', async () => {
@@ -65,13 +74,6 @@ describe('api tests for working with blogs', () => {
   })
   
   test('api test: adding a new blog', async () => {
-
-    // Login:
-    const response = await api
-      .post('/api/login')
-      .send({ username: 'username', password: 'password'})
-
-    const token = response.body.token
   
     const blog = new Blog({
       title: 'Test blog',
@@ -82,7 +84,7 @@ describe('api tests for working with blogs', () => {
   
     await api
       .post('/api/blogs')
-      .set('Authorization', `Bearer ${token}`)
+      .set(header)
       .send(blog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -95,13 +97,6 @@ describe('api tests for working with blogs', () => {
   })
   
   test('api test: a blog without title will not be added', async () => {
-
-    // Login:
-    const response = await api
-      .post('/api/login')
-      .send({ username: 'username', password: 'password'})
-
-    const token = response.body.token
   
     const blog = new Blog({
       author: 'AI',
@@ -111,7 +106,7 @@ describe('api tests for working with blogs', () => {
   
     await api
       .post('/api/blogs')
-      .set('Authorization', `Bearer ${token}`)
+      .set(header)
       .send(blog)
       .expect(400)
   
@@ -120,13 +115,6 @@ describe('api tests for working with blogs', () => {
   })
   
   test('api test: a blog without url will not be added', async () => {
-
-    // Login:
-    const response = await api
-      .post('/api/login')
-      .send({ username: 'username', password: 'password'})
-
-    const token = response.body.token
   
     const blog = new Blog({
       title: 'Test blog',
@@ -136,7 +124,7 @@ describe('api tests for working with blogs', () => {
   
     await api
       .post('/api/blogs')
-      .set('Authorization', `Bearer ${token}`)
+      .set(header)
       .send(blog)
       .expect(400)
   
@@ -150,13 +138,6 @@ describe('api tests for working with blogs', () => {
   })
   
   test('api test: adding a new blog without likes', async () => {
-
-    // Login:
-    const response = await api
-      .post('/api/login')
-      .send({ username: 'username', password: 'password'})
-
-    const token = response.body.token
   
     const blog = new Blog({
       title: 'Test blog',
@@ -166,7 +147,7 @@ describe('api tests for working with blogs', () => {
   
     await api
       .post('/api/blogs')
-      .set('Authorization', `Bearer ${token}`)
+      .set(header)
       .send(blog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -179,20 +160,13 @@ describe('api tests for working with blogs', () => {
   
   test('api test: check deleted blog is deleted', async () => {
 
-    // Login:
-    const response = await api
-      .post('/api/login')
-      .send({ username: 'username', password: 'password'})
-
-    const token = response.body.token
-
     let blogs = await helper.blogsInDb()
     expect(blogs.map(b => b.title)).toContain("Google")
   
     const blog = blogs[0]
     const id = blog.id
     await api.delete(`/api/blogs/${id}`)
-      .set('Authorization', `Bearer ${token}`)
+      .set(header)
       .expect(204)
   
     blogs = await helper.blogsInDb()
