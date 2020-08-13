@@ -160,13 +160,18 @@ describe('tests for working with user db', () => {
     await User.deleteMany({})
 
     const password = await bcrypt.hash('mysecretword', 10)
-    const user = new User({
+    await new User({
       username: 'username',
       name: 'User Name',
       password
-    })
+    }).save()
 
-    await user.save()
+    await new User({
+      username: 'username2',
+      name: 'User2 Name',
+      password
+    }).save()
+
   })
 
   test('user db: list all users', async () => {
@@ -174,11 +179,13 @@ describe('tests for working with user db', () => {
       .get('/api/users')
       .expect(200)
 
-    expect(response.body).toHaveLength(1)
+    const users = await helper.usersInDb()
+    expect(response.body).toHaveLength(users.length)
   })
 
   test('user db: creating a new user', async () => {
 
+    const usersBefore = await helper.usersInDb()
     const password = 'mysecretword2'
     const user = {
       username: 'Username2',
@@ -191,12 +198,13 @@ describe('tests for working with user db', () => {
       .send(user)
       .expect(201)
 
-    const users = await helper.usersInDb()
-    expect(users).toHaveLength(2)
+    const usersAfter = await helper.usersInDb()
+    expect(usersAfter).toHaveLength(usersBefore.length + 1)
   })
 
   test('user db: validation test with short username', async () => {
 
+    const usersBefore = await helper.usersInDb()
     const password = 'mysecretword2'
     const user = {
       username: '12',
@@ -209,12 +217,13 @@ describe('tests for working with user db', () => {
       .send(user)
       .expect(400)
 
-    const users = await helper.usersInDb()
-    expect(users).toHaveLength(1)
+    const usersAfter = await helper.usersInDb()
+    expect(usersAfter).toHaveLength(usersBefore.length)
   })
 
   test('user db: validation test with short password', async () => {
-
+    
+    const usersBefore = await helper.usersInDb()
     const password = '12'
     const user = {
       username: 'Username3',
@@ -227,12 +236,13 @@ describe('tests for working with user db', () => {
       .send(user)
       .expect(400)
     
-    const users = await helper.usersInDb()
-    expect(users).toHaveLength(1)
+    const usersAfter = await helper.usersInDb()
+    expect(usersAfter).toHaveLength(usersBefore.length)
   })
 
   test('user db: validation test with no username or password', async () => {
 
+    const usersBefore = await helper.usersInDb()
     const user = {}
 
     const response = await api
@@ -240,8 +250,8 @@ describe('tests for working with user db', () => {
       .send(user)
       .expect(400)
     
-    const users = await helper.usersInDb()
-    expect(users).toHaveLength(1)
+    const usersAfter = await helper.usersInDb()
+    expect(usersAfter).toHaveLength(usersBefore.length)
   })
 
   test('user db: validation test with nonunique username', async () => {
