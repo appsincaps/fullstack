@@ -10,7 +10,7 @@ Content-Type: application/json
 {
   "title": "Google me",
   "author": "SF",
-  "url": "www.google.com",
+  "url": "http://www.google.com",
   "likes": 0
 }
 
@@ -21,7 +21,7 @@ Content-Type: application/json
 {
   "title": "Sunlight",
   "author": "SF",
-  "url": "www.sunlightx.com",
+  "url": "http://www.sunlightx.com",
   "likes": 1
 }
 

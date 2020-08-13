@@ -13,6 +13,16 @@ const userRouter = require('../controllers/users')
 describe('api tests for working with blogs', () => {
 
   beforeEach(async () => {
+    /*
+    await User.deleteMany({})
+
+    const password = await bcrypt.hash('mysecretword', 10)
+    await new User({
+      username: 'username',
+      name: 'User Name',
+      password
+    }).save()
+    */
 
     await Blog.deleteMany({})
   
@@ -166,12 +176,6 @@ describe('tests for working with user db', () => {
       password
     }).save()
 
-    await new User({
-      username: 'username2',
-      name: 'User2 Name',
-      password
-    }).save()
-
   })
 
   test('user db: list all users', async () => {
@@ -188,8 +192,8 @@ describe('tests for working with user db', () => {
     const usersBefore = await helper.usersInDb()
     const password = 'mysecretword2'
     const user = {
-      username: 'Username2',
-      name: 'User name2',
+      username: 'username2',
+      name: 'User Name2',
       password
     }
 
@@ -205,7 +209,7 @@ describe('tests for working with user db', () => {
   test('user db: validation test with short username', async () => {
 
     const usersBefore = await helper.usersInDb()
-    const password = 'mysecretword2'
+    const password = 'mysecretword'
     const user = {
       username: '12',
       name: 'User name2',

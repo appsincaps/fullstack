@@ -10,6 +10,8 @@ blogRouter.get('/', async (request, response) => {
 blogRouter.post('/', async (request, response, next) => {
 
   const users = await User.find({})
+  if (!users[0]) return response.status(401).json({error: "No active user"})
+
   const activeUser = users[0]
 
   const content = {
@@ -21,10 +23,10 @@ blogRouter.post('/', async (request, response, next) => {
   }
   const blog = new Blog(content)
   const result = await blog.save()
+
   if (!activeUser.blogs) activeUser.blogs = []
   activeUser.blogs = activeUser.blogs.concat(result._id)
   const update = await activeUser.save()
-  console.log(update)
 
   response.status(201).json(result)
 })
