@@ -5,9 +5,8 @@ const api = supertest(app)
 const helper = require('./test_helper')
 const Blog = require('../models/blog')
 const bcrypt = require('bcrypt')
-const Author = require('../models/author')
-const authorRouter = require('../controllers/authors')
-const { initialAuthors, authorsInDb } = require('./test_helper')
+const User = require('../models/user')
+const userRouter = require('../controllers/users')
 
 /**** API TESTS ****/
 
@@ -153,114 +152,114 @@ describe('api tests for working with blogs', () => {
   
 })
 
-/**** AUTHOR DB TESTS ****/
+/**** USER DB TESTS ****/
 
-describe('tests for working with authors db', () => {
+describe('tests for working with user db', () => {
 
   beforeEach(async () => {
-    await Author.deleteMany({})
+    await User.deleteMany({})
 
     const password = await bcrypt.hash('mysecretword', 10)
-    const author = new Author({
+    const user = new User({
       username: 'Username',
       name: 'User name',
       password
     })
 
-    await author.save()
+    await user.save()
   })
 
-  test('author db: list all authors', async () => {
+  test('user db: list all users', async () => {
     const response = await api
-      .get('/api/authors')
+      .get('/api/users')
       .expect(200)
 
     expect(response.body).toHaveLength(1)
   })
 
-  test('author db: creating a new author', async () => {
+  test('user db: creating a new user', async () => {
 
     const password = 'mysecretword2'
-    const author = {
+    const user = {
       username: 'Username2',
       name: 'User name2',
       password
     }
 
     const response = await api
-      .post('/api/authors')
-      .send(author)
+      .post('/api/users')
+      .send(user)
       .expect(201)
 
-    const authors = await helper.authorsInDb()
-    expect(authors).toHaveLength(2)
+    const users = await helper.usersInDb()
+    expect(users).toHaveLength(2)
   })
 
-  test('author db: validation test with short username', async () => {
+  test('user db: validation test with short username', async () => {
 
     const password = 'mysecretword2'
-    const author = {
+    const user = {
       username: '12',
       name: 'User name2',
       password
     }
 
     const response = await api
-      .post('/api/authors')
-      .send(author)
+      .post('/api/users')
+      .send(user)
       .expect(400)
 
-    const authors = await helper.authorsInDb()
-    expect(authors).toHaveLength(1)
+    const users = await helper.usersInDb()
+    expect(users).toHaveLength(1)
   })
 
-  test('author db: validation test with short password', async () => {
+  test('user db: validation test with short password', async () => {
 
     const password = '12'
-    const author = {
+    const user = {
       username: 'Username3',
       name: 'User name2',
       password
     }
 
     const response = await api
-      .post('/api/authors')
-      .send(author)
+      .post('/api/users')
+      .send(user)
       .expect(400)
     
-    const authors = await helper.authorsInDb()
-    expect(authors).toHaveLength(1)
+    const users = await helper.usersInDb()
+    expect(users).toHaveLength(1)
   })
 
-  test('author db: validation test with no username or password', async () => {
+  test('user db: validation test with no username or password', async () => {
 
-    const author = {}
+    const user = {}
 
     const response = await api
-      .post('/api/authors')
-      .send(author)
+      .post('/api/users')
+      .send(user)
       .expect(400)
     
-    const authors = await helper.authorsInDb()
-    expect(authors).toHaveLength(1)
+    const users = await helper.usersInDb()
+    expect(users).toHaveLength(1)
   })
 
-  test('author db: validation test with nonunique username', async () => {
+  test('user db: validation test with nonunique username', async () => {
 
-    const password = 'mysecretword3'
-    const author = {
-      username: 'Username2',
-      name: 'User name3',
+    const password = 'mysecretword2'
+    const user = {
+      username: 'Username',
+      name: 'User name',
       password
     }
 
     const response = await api
-      .post('/api/authors')
-      .send(author)
+      .post('/api/users')
+      .send(user)
       .expect(400)
 
-    const authors = await helper.authorsInDb()
-    expect(authors).toHaveLength(1)
+    const users = await helper.usersInDb()
+    expect(users).toHaveLength(1)
   })
 
 })
