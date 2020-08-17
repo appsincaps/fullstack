@@ -9,7 +9,7 @@ const App = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
-  const [message, setMessage] = useState('')
+  const [message, setMessage] = useState(null)
   const [username, setUsername] = useState('username')
   const [password, setPassword] = useState('password')
   const [user, setUser] = useState(null)
@@ -20,7 +20,6 @@ const App = () => {
     
     try {
       const logged = await loginService.login( { username, password } )
-      console.log(logged)
       setUser(logged)
       blogService.setToken(logged.token)
       setUsername('')
@@ -28,9 +27,9 @@ const App = () => {
       window.localStorage.setItem('user', JSON.stringify(logged))
     }
     catch (error) {
-      setMessage('Wrong credentials')
+      setMessage( { error:'Wrong credentials' } )
       setTimeout( () => {
-        setMessage('')
+        setMessage(null)
       }, 3000)
     }
 
@@ -42,17 +41,31 @@ const App = () => {
     setUser(null)
   }
 
-  const handleCreate = (event) => {
+  const handleCreate = async event => {
     event.preventDefault()
-    const blog = {
-      title,
-      author,
-      url
+    try {
+      const blog = {
+        title,
+        author,
+        url
+      }
+      await blogService.create(blog)
+
+      setMessage( { success: `${title} by ${author} is added` } )
+      setTimeout( () => {
+        setMessage(null)
+      }, 3000)
+
+      setTitle('')
+      setAuthor('')
+      setUrl('')
     }
-    blogService.create(blog)
-    setTitle('')
-    setAuthor('')
-    setUrl('')
+    catch (error) {
+      setMessage( { error: error.message } )
+      setTimeout( () => {
+        setMessage(null)
+      }, 3000)
+    }
   }
 
   useEffect(() => {
@@ -144,7 +157,7 @@ const App = () => {
               onChange = { ({target}) => setUrl(target.value) }
             />
           </div>
-          <button type='submit'>Save</button>
+          <button type='submit'>Create</button>
         </form>
       </div>
     )
