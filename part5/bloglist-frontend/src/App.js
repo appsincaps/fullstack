@@ -6,6 +6,9 @@ import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
   const [message, setMessage] = useState('')
   const [username, setUsername] = useState('username')
   const [password, setPassword] = useState('password')
@@ -19,6 +22,7 @@ const App = () => {
       const logged = await loginService.login( { username, password } )
       console.log(logged)
       setUser(logged)
+      blogService.setToken(logged.token)
       setUsername('')
       setPassword('')
       window.localStorage.setItem('user', JSON.stringify(logged))
@@ -38,16 +42,32 @@ const App = () => {
     setUser(null)
   }
 
+  const handleCreate = (event) => {
+    event.preventDefault()
+    const blog = {
+      title,
+      author,
+      url
+    }
+    blogService.create(blog)
+    setTitle('')
+    setAuthor('')
+    setUrl('')
+  }
+
   useEffect(() => {
-    blogService.getAll().then(blogs =>
+    blogService.get().then(blogs =>
       setBlogs( blogs )
     )  
   }, [])
 
   useEffect(() => {
-    const user = window.localStorage.getItem('user')
-    if (user) setUser(JSON.parse(user))
-    console.log(user)
+    let savedUser = window.localStorage.getItem('user')
+    if (savedUser) {
+      savedUser = JSON.parse(savedUser)
+      setUser(savedUser)
+      blogService.setToken(savedUser.token)
+    }
   }, [])
 
   const loginForm = () => {
@@ -81,12 +101,51 @@ const App = () => {
   const blogList = () => {
     return (
       <div>
-        {`${user.name} is logged in`}
+        {`${user.name} is logged in:`}
         <button onClick={handleLogout}>Logout</button>
         <h2>blogs</h2>
         {blogs.map(blog =>
           <Blog key={blog.id} blog={blog} />
         )}
+        {createNew()}
+      </div>
+    )
+  }
+
+  const createNew = () => {
+    return (
+      <div>
+        <h2>Create new blog</h2>
+        <form onSubmit={handleCreate}>
+          <div>
+            Title: 
+            <input 
+              type = 'text'
+              value = {title}
+              name = 'Title'
+              onChange = { ({target}) => setTitle(target.value) }
+            />
+          </div>
+          <div>
+            Author: 
+            <input 
+              type = 'text'
+              value = {author}
+              name = 'Author'
+              onChange = { ({target}) => setAuthor(target.value) }
+            />
+          </div>
+          <div>
+            URL: 
+            <input 
+              type = 'text'
+              value = {url}
+              name = 'URL'
+              onChange = { ({target}) => setUrl(target.value) }
+            />
+          </div>
+          <button type='submit'>Save</button>
+        </form>
       </div>
     )
   }
