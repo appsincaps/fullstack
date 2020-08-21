@@ -1,18 +1,20 @@
-import React, { useState, useEffect } from 'react'
-import Blog from './components/Blog'
+import React, { useState, useEffect, useRef } from 'react'
 import Notification from './components/Notification'
+import LoginForm from './components/LoginForm'
+import LoggedInfo from './components/LoggedInfo'
+import BlogList from './components/BlogList'
+import CreateNew from './components/CreateNew'
+import Toggable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
   const [message, setMessage] = useState(null)
   const [username, setUsername] = useState('username')
   const [password, setPassword] = useState('password')
   const [user, setUser] = useState(null)
+  const toggleRef = useRef()
 
   const handleLogin = async (event) => {
 
@@ -35,40 +37,25 @@ const App = () => {
 
   }
 
-  const handleLogout = (event) => {
+  const createBlog = async blog => {
+    const newBlog = await blogService.create(blog)
+    setBlogs( blogs.concat(newBlog) )
+    toggleRef.current.toggle()
+  }
+
+  const deleteBlog = async blog => {
+    await blogService.remove(blog.id)
+    const i = blogs.findIndex( v => blog.id === v.id )
+    setBlogs([...blogs.slice(0,i), ...blogs.slice(i+1)])
+  }
+
+  const handleLogout = event => {
     event.preventDefault()
     window.localStorage.removeItem('user')
     setUser(null)
   }
 
-  const handleCreate = async event => {
-    event.preventDefault()
-    try {
-      const blog = {
-        title,
-        author,
-        url
-      }
-      await blogService.create(blog)
-
-      setMessage( { success: `${title} by ${author} is added` } )
-      setTimeout( () => {
-        setMessage(null)
-      }, 3000)
-
-      setTitle('')
-      setAuthor('')
-      setUrl('')
-    }
-    catch (error) {
-      setMessage( { error: error.message } )
-      setTimeout( () => {
-        setMessage(null)
-      }, 3000)
-    }
-  }
-
-  useEffect(() => {
+  useEffect( () => {
     blogService.get().then(blogs =>
       setBlogs( blogs )
     )  
@@ -83,92 +70,24 @@ const App = () => {
     }
   }, [])
 
-  const loginForm = () => {
-    return (
-      <form onSubmit={handleLogin}>
-        <div>
-          Username:
-          <input 
-            type = 'text'
-            value = {username}
-            name = 'Username'
-            onChange = { ({target}) => setUsername(target.value) }
-          />
-        </div>
-        <div>
-          Password:
-          <input 
-            type = 'password'
-            value = {password}
-            name = 'Password'
-            onChange = { ({target}) => setPassword(target.value) }
-          />
-        </div>
-        <div>
-          <button type = 'submit'>Login</button>
-        </div>
-      </form>
-    )
-  }
-
-  const blogList = () => {
-    return (
-      <div>
-        {`${user.name} is logged in:`}
-        <button onClick={handleLogout}>Logout</button>
-        <h2>blogs</h2>
-        {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} />
-        )}
-        {createNew()}
-      </div>
-    )
-  }
-
-  const createNew = () => {
-    return (
-      <div>
-        <h2>Create new blog</h2>
-        <form onSubmit={handleCreate}>
-          <div>
-            Title: 
-            <input 
-              type = 'text'
-              value = {title}
-              name = 'Title'
-              onChange = { ({target}) => setTitle(target.value) }
-            />
-          </div>
-          <div>
-            Author: 
-            <input 
-              type = 'text'
-              value = {author}
-              name = 'Author'
-              onChange = { ({target}) => setAuthor(target.value) }
-            />
-          </div>
-          <div>
-            URL: 
-            <input 
-              type = 'text'
-              value = {url}
-              name = 'URL'
-              onChange = { ({target}) => setUrl(target.value) }
-            />
-          </div>
-          <button type='submit'>Create</button>
-        </form>
-      </div>
-    )
-  }
-
   return (
     <div>
-      <Notification message={message}></Notification>
+      <LoggedInfo user={user} />
+      <Notification message={message} />
       { !user 
-      ? loginForm()
-      : blogList()
+      ? <LoginForm 
+          username={username} 
+          setUsername={setUsername} 
+          password={password} 
+          setPassword={setPassword}
+          handleLogin={handleLogin}
+        />
+      : <div>
+          <BlogList handleLogout={handleLogout} deleteBlog={deleteBlog} blogs={blogs} />
+          <Toggable label='Create a new blog' ref={toggleRef}>
+            <CreateNew createBlog={createBlog} setMessage={setMessage} />
+          </Toggable>
+        </div>
       }
     </div>
   )

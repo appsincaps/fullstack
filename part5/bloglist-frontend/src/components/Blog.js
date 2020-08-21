@@ -1,7 +1,8 @@
 import React from 'react'
-const Blog = ({ blog }) => (
+const Blog = ({ blog, deleteBlog }) => (
   <div>
-    {blog.title} {blog.author}
+    {blog.title} by {blog.author} 
+    <button onClick={() => deleteBlog(blog)}> delete </button>
   </div>
 )
 

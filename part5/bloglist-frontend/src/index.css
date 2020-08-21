@@ -17,3 +17,12 @@
   padding: 10px;
   margin-bottom: 10px;
 }
+
+.loggedinfo {
+  color: blue;
+  background: lightgreen;
+  font-size: 15px;
+  border-style: solid;
+  padding: 10px;
+  margin-bottom: 10px;
+}
