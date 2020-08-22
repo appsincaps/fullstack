@@ -49,6 +49,13 @@ const App = () => {
     setBlogs([...blogs.slice(0,i), ...blogs.slice(i+1)])
   }
 
+  const upLike = async blog => {
+    blog.likes++
+    const newBlog = await blogService.update(blog)
+    const i = blogs.findIndex( v => blog.id === v.id )
+    setBlogs([...blogs.slice(0,i), newBlog, ...blogs.slice(i+1)])
+  }
+
   const handleLogout = event => {
     event.preventDefault()
     window.localStorage.removeItem('user')
@@ -83,7 +90,7 @@ const App = () => {
           handleLogin={handleLogin}
         />
       : <div>
-          <BlogList handleLogout={handleLogout} deleteBlog={deleteBlog} blogs={blogs} />
+          <BlogList handleLogout={handleLogout} deleteBlog={deleteBlog} upLike={upLike} blogs={blogs} />
           <Toggable label='Create a new blog' ref={toggleRef}>
             <CreateNew createBlog={createBlog} setMessage={setMessage} />
           </Toggable>

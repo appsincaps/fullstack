@@ -67,12 +67,14 @@ blogRouter.put('/:id', async (request, response) => {
     title: request.body.title,
     author: request.body.author,
     url: request.body.url,
-    likes: request.body.likes
+    likes: request.body.likes,
+    user: request.body.user
   }
 
   const update = await Blog
     .findByIdAndUpdate(id, content, { new: true, runValidators: true, context: 'query' })
-  response.json(update)
+    .populate('user', { username: 1, name: 1, id: 1 })
+    response.json(update)
 })
 
 module.exports = blogRouter

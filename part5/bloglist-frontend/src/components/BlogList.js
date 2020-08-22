@@ -5,6 +5,7 @@ const BlogList = (props) => {
   const {
     handleLogout,
     deleteBlog,
+    upLike,
     blogs
   } = props
 
@@ -13,7 +14,7 @@ const BlogList = (props) => {
       <button onClick={handleLogout}>Logout</button>
       <h2>blogs</h2>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} deleteBlog={deleteBlog} />
+        <Blog key={blog.id} blog={blog} deleteBlog={deleteBlog} upLike={upLike}/>
       )}
     </div>
   )
