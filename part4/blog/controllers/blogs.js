@@ -56,7 +56,19 @@ blogRouter.delete('/:id', async (request, response) => {
     return response.status(401).json( { error: 'Not authorized'})
   }
 
+  const blogId = blog.id.toString()
   await blog.remove()
+
+  const i = activeUser.blogs.findIndex( blog => blog.toString() === blogId )
+  console.log(blogId)
+  console.log(activeUser.blogs)
+  console.log(i)
+  if ( i > -1 ) {
+    let newBlogs = activeUser.blogs
+    newBlogs.splice(i,1)
+    activeUser.blogs = newBlogs
+    await activeUser.save()
+  }
 
   response.status(204).end()
 })

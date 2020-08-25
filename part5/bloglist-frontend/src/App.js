@@ -44,6 +44,7 @@ const App = () => {
   }
 
   const deleteBlog = async blog => {
+    if (!window.confirm(`Delete ${blog.title}?`)) return
     await blogService.remove(blog.id)
     const i = blogs.findIndex( v => blog.id === v.id )
     setBlogs([...blogs.slice(0,i), ...blogs.slice(i+1)])
@@ -90,7 +91,13 @@ const App = () => {
           handleLogin={handleLogin}
         />
       : <div>
-          <BlogList handleLogout={handleLogout} deleteBlog={deleteBlog} upLike={upLike} blogs={blogs} />
+          <BlogList 
+            handleLogout={handleLogout} 
+            deleteBlog={deleteBlog} 
+            upLike={upLike} 
+            blogs={blogs} 
+            user={user} 
+          />
           <Toggable label='Create a new blog' ref={toggleRef}>
             <CreateNew createBlog={createBlog} setMessage={setMessage} />
           </Toggable>
