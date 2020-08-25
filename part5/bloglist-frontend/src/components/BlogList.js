@@ -9,13 +9,18 @@ const BlogList = (props) => {
     blogs
   } = props
 
+  const sortedBlogs = [...blogs]
+  sortedBlogs.sort( (blog1, blog2) => blog2.likes - blog1.likes )
+
   return (
     <div>
       <button onClick={handleLogout}>Logout</button>
       <h2>blogs</h2>
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} deleteBlog={deleteBlog} upLike={upLike}/>
-      )}
+      {[...blogs]
+        .sort( (blog1, blog2) => blog2.likes - blog1.likes )
+        .map(blog =>
+          <Blog key={blog.id} blog={blog} deleteBlog={deleteBlog} upLike={upLike}/>)
+      }
     </div>
   )
 }
