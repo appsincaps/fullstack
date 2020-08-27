@@ -19,7 +19,7 @@ const App = () => {
   const handleLogin = async (event) => {
 
     event.preventDefault()
-    
+
     try {
       const logged = await loginService.login( { username, password } )
       setUser(logged)
@@ -66,7 +66,7 @@ const App = () => {
   useEffect( () => {
     blogService.get().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -82,21 +82,21 @@ const App = () => {
     <div>
       <LoggedInfo user={user} />
       <Notification message={message} />
-      { !user 
-      ? <LoginForm 
-          username={username} 
-          setUsername={setUsername} 
-          password={password} 
+      { !user
+        ? <LoginForm
+          username={username}
+          setUsername={setUsername}
+          password={password}
           setPassword={setPassword}
           handleLogin={handleLogin}
         />
-      : <div>
-          <BlogList 
-            handleLogout={handleLogout} 
-            deleteBlog={deleteBlog} 
-            upLike={upLike} 
-            blogs={blogs} 
-            user={user} 
+        : <div>
+          <BlogList
+            handleLogout={handleLogout}
+            deleteBlog={deleteBlog}
+            upLike={upLike}
+            blogs={blogs}
+            user={user}
           />
           <Toggable label='Create a new blog' ref={toggleRef}>
             <CreateNew createBlog={createBlog} setMessage={setMessage} />

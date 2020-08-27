@@ -12,7 +12,7 @@ const Togglable = React.forwardRef(( props, ref ) => {
   }
 
   useImperativeHandle( ref, () => {
-    return { toggle } 
+    return { toggle }
   })
 
   return (
@@ -31,5 +31,7 @@ const Togglable = React.forwardRef(( props, ref ) => {
 Togglable.propTypes = {
   label: PropTypes.string.isRequired
 }
+
+Togglable.displayName = 'Togglable'
 
 export default Togglable

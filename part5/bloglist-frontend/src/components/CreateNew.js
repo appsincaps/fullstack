@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 
 const CreateNew = ( { createBlog, setMessage } ) => {
 
@@ -38,30 +38,30 @@ const CreateNew = ( { createBlog, setMessage } ) => {
       <h2>Create new blog</h2>
       <form onSubmit={handleCreate}>
         <div>
-          Title: 
-          <input 
+          Title:
+          <input
             type = 'text'
             value = {title}
             name = 'Title'
-            onChange = { ({target}) => setTitle(target.value) }
+            onChange = { ({ target }) => setTitle(target.value) }
           />
         </div>
         <div>
-          Author: 
-          <input 
+          Author:
+          <input
             type = 'text'
             value = {author}
             name = 'Author'
-            onChange = { ({target}) => setAuthor(target.value) }
+            onChange = { ({ target }) => setAuthor(target.value) }
           />
         </div>
         <div>
-          URL: 
-          <input 
+          URL:
+          <input
             type = 'text'
             value = {url}
             name = 'URL'
-            onChange = { ({target}) => setUrl(target.value) }
+            onChange = { ({ target }) => setUrl(target.value) }
           />
         </div>
         <button type='submit'>Create</button>

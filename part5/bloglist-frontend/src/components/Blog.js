@@ -13,17 +13,17 @@ const Blog = ({ blog, deleteBlog, upLike, user }) => {
 
   return (
     <div style={blogStyle}>
-      {blog.title} by {blog.author} 
+      {blog.title} by {blog.author}
       <button onClick={() => setExpand(!expand)}>{expand ? 'hide' : 'view'}</button>
       { expand &&
         <div>
           <div>{blog.url}</div>
           <div>likes {blog.likes} <button onClick={() => upLike(blog)}>Like</button></div>
           <div>{blog.user.name}</div>
-          { (user.username === blog.user.username) && 
+          { (user.username === blog.user.username) &&
             <div> <button onClick={() => deleteBlog(blog)}> delete </button> </div>
           }
-          
+
         </div>
       }
     </div>
