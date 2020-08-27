@@ -12,7 +12,7 @@ const Blog = ({ blog, deleteBlog, upLike, user }) => {
   const [ expand, setExpand ] = useState(false)
 
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} className='blog'>
       {blog.title} by {blog.author}
       <button onClick={() => setExpand(!expand)}>{expand ? 'hide' : 'view'}</button>
       { expand &&
