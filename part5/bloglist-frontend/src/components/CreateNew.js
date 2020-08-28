@@ -36,10 +36,11 @@ const CreateNew = ( { createBlog, setMessage } ) => {
   return (
     <div>
       <h2>Create new blog</h2>
-      <form onSubmit={handleCreate}>
+      <form onSubmit={handleCreate} id='form' >
         <div>
           Title:
           <input
+            id = 'title'
             type = 'text'
             value = {title}
             name = 'Title'
@@ -49,6 +50,7 @@ const CreateNew = ( { createBlog, setMessage } ) => {
         <div>
           Author:
           <input
+            id = 'author'
             type = 'text'
             value = {author}
             name = 'Author'
@@ -58,13 +60,14 @@ const CreateNew = ( { createBlog, setMessage } ) => {
         <div>
           URL:
           <input
+            id = 'url'
             type = 'text'
             value = {url}
             name = 'URL'
             onChange = { ({ target }) => setUrl(target.value) }
           />
         </div>
-        <button type='submit'>Create</button>
+        <button type='submit' id='submit'>Create</button>
       </form>
     </div>
   )
