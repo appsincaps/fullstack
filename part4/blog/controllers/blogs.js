@@ -60,9 +60,7 @@ blogRouter.delete('/:id', async (request, response) => {
   await blog.remove()
 
   const i = activeUser.blogs.findIndex( blog => blog.toString() === blogId )
-  console.log(blogId)
-  console.log(activeUser.blogs)
-  console.log(i)
+  
   if ( i > -1 ) {
     let newBlogs = activeUser.blogs
     newBlogs.splice(i,1)
