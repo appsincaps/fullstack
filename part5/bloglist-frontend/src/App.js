@@ -38,8 +38,9 @@ const App = () => {
   }
 
   const createBlog = async blog => {
-    const newBlog = await blogService.create(blog)
-    setBlogs( blogs.concat(newBlog) )
+    await blogService.create(blog)
+    const newBlogs = await blogService.get()
+    setBlogs( newBlogs )
     toggleRef.current.toggle()
   }
 
