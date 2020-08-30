@@ -29,5 +29,6 @@ Cypress.Commands.add('login', ({ username, password }) => {
     .then(({ body }) => {
       localStorage.setItem('user', JSON.stringify(body))
       cy.visit('http://localhost:3000')
+      Cypress.env('token', body.token)
     })
 })

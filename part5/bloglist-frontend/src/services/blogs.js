@@ -7,6 +7,10 @@ const setToken = newToken => {
   token = `Bearer ${newToken}`
 }
 
+const getHeaders = () => {
+  return { Authorization: token }
+}
+
 const get = async () => {
   const response = await axios.get(baseUrl)
   return response.data
@@ -37,4 +41,4 @@ const update = async blog => {
   return response.data
 }
 
-export default { get, create, remove, update, setToken }
+export default { get, create, remove, update, setToken, getHeaders }

@@ -1,13 +1,24 @@
+import blogService from '../../src/services/blogs'
+
 describe('Blog app', function() {
 
   beforeEach( function() {
     cy.request('POST', 'http://localhost:3003/api/testing/reset')
+
     const user = {
       name: 'User Name',
       username: 'username',
       password: 'password'
     }
     cy.request('POST', 'http://localhost:3003/api/users/', user)
+
+    const user2 = {
+      name: 'User2 Name',
+      username: 'username2',
+      password: 'password2'
+    }
+    cy.request('POST', 'http://localhost:3003/api/users/', user2)
+
     cy.visit('http://localhost:3000')
   })
 
@@ -51,7 +62,7 @@ describe('Blog app', function() {
     })
   })
 
-  describe.only('After a blog is created', function() {
+  describe('After a blog is created', function() {
     beforeEach(function() {
       cy.login({ username: 'username', password: 'password' })
       cy.contains('Create a new blog').click()
@@ -61,11 +72,58 @@ describe('Blog app', function() {
       cy.get('#submit').click()
     })
 
-    it('After a blog is created', function() {
+    it('can be liked', function() {
       cy.contains('view').click()
       cy.contains('Like').click()
       cy.contains('likes 1')
     })
+
+    it('can be deleted by owner', function() {
+      cy.contains('view').click()
+      cy.contains('delete').click()
+      cy.should('not.contain','New test title')
+    })
+
+    it('cannot be deleted by others', function() {
+      cy.contains('Logout').click()
+      cy.login({ username: 'username2', password: 'password2' })
+      cy.contains('view').click()
+      cy.should('not.contain','delete')
+    })
+  })
+
+  describe('After several blogs are created', function() {
+    beforeEach(function() {
+      cy.login({ username: 'username', password: 'password' })
+        .then( function() {
+          const auth = {
+            Authorization: `bearer ${Cypress.env('token')}`
+          }
+
+          for (let i=0; i<3; i++) {
+            cy.request({
+              method: 'POST',
+              url: 'http://localhost:3003/api/blogs',
+              body: {
+                title: `Title #${3-i}`,
+                author: 'author',
+                url: 'url',
+                likes: i+1
+              },
+              headers: auth
+            })
+          }
+        })
+      cy.visit('http://localhost:3000')
+    })
+
+    it('blogs are sorted', function() {
+      cy.get('.blog:first')
+        .should('contain','#1')
+      cy.get('.blog:last')
+        .should('contain','#3')
+    })
+
   })
 
 })
