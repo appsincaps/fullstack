@@ -28,6 +28,13 @@ export const upvote = id => {
   }
 }
 
+export const newAnecdote = event => {
+  return {
+    type: 'NEW',
+    data: asObject(event.target.content.value)
+  }
+}
+
 const reducer = (state = initialState, action) => {
   console.log('state now: ', state)
   console.log('action', action)
@@ -37,6 +44,10 @@ const reducer = (state = initialState, action) => {
       const i = state.findIndex( a => a.id === action.data.id )
       const upvoted = { ...state[i], votes: state[i].votes+1 }
       return [ ...state.slice(0,i), upvoted, ...state.slice(i+1) ]
+
+    case 'NEW':
+      return state.concat(action.data)
+
     default:
       return state
   }
