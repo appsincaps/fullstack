@@ -1,11 +1,18 @@
 import React from 'react'
 import { upvote } from '../reducers/anecdoteReducer'
+import { error, success, remove } from '../reducers/notificationReducer'
 import { useSelector, useDispatch } from 'react-redux'
 
 const AnecdoteList = () => {
   const dispatch = useDispatch()
   const anecdotes = useSelector(state => state.anecdotes)
   const orderedList = [...anecdotes].sort((a,b) => b.votes - a.votes)
+
+  const vote = anecdote => {
+    dispatch(upvote(anecdote.id))
+    dispatch(success(`"${anecdote.content}" was upvoted`))
+    setTimeout(() => dispatch(remove()), 5000)
+  }
 
   return (
     <div>
@@ -16,7 +23,7 @@ const AnecdoteList = () => {
           </div>
           <div>
             has {anecdote.votes}
-            <button onClick={() => dispatch(upvote(anecdote.id))}>vote</button>
+            <button onClick={() => vote(anecdote)}>vote</button>
           </div>
         </div>
       )}
