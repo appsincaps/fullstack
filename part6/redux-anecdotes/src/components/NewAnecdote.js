@@ -11,8 +11,8 @@ const NewAnecdote = () => {
   const addNew = async (event) => {
     event.preventDefault()
     const anecdote = { content: event.target.content.value }
-    const created = await anecdoteService.createNew(anecdote)
-    dispatch(newAnecdote(created))
+    event.target.content.value = ''
+    dispatch(newAnecdote(anecdote))
     dispatch(success(`A new anecdote was created`))
     setTimeout(() => dispatch(remove()), 5000)
   }
