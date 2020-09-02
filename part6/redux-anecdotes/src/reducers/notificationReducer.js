@@ -1,31 +1,31 @@
-export const error = message => {
-  return {
-    type: 'ERROR',
-    message
+export const clear = () => {
+  return async dispatch => {
+    dispatch({
+      type: 'CLEAR',
+      message: null
+    })
   }
 }
 
-export const success = message => {
-  return {
-    type: 'SUCCESS',
-    message
-  }
-}
-
-export const remove = () => {
-  return {
-    type: 'REMOVE',
-    message: null
+export const setNotification = (message, delay) => {
+  
+  return async dispatch => {
+    
+    dispatch({
+      type: 'SET',
+      message
+    })
+    
+    setTimeout(() => dispatch(clear()), delay*1000)
   }
 }
 
 const reducer = (state = null, action) => {
+  console.log(action)
   switch (action.type) {
-    case 'ERROR':
+    case 'SET':
       return action.message
-    case 'SUCCESS':
-      return action.message
-    case 'REMOVE':
+    case 'CLEAR':
       return action.message
     default:
       return state
