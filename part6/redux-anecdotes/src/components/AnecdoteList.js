@@ -15,7 +15,7 @@ const AnecdoteList = () => {
   const orderedList = filtered.sort((a,b) => b.votes - a.votes)
 
   const vote = anecdote => {
-    dispatch(upvote(anecdote.id))
+    dispatch(upvote(anecdote))
     dispatch(success(`"${anecdote.content}" was upvoted`))
     setTimeout(() => dispatch(remove()), 5000)
   }
