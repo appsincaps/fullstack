@@ -1,3 +1,5 @@
+let idTimeout
+
 export const clear = () => {
   return async dispatch => {
     dispatch({
@@ -9,6 +11,8 @@ export const clear = () => {
 
 export const setNotification = (message, delay) => {
   
+  clearTimeout(idTimeout)
+
   return async dispatch => {
     
     dispatch({
@@ -16,7 +20,7 @@ export const setNotification = (message, delay) => {
       message
     })
     
-    setTimeout(() => dispatch(clear()), delay*1000)
+    idTimeout = setTimeout(() => dispatch(clear()), delay*1000)
   }
 }
 
